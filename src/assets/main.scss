@@ -26,6 +26,10 @@ p {
   margin: 0;
 }
 
+textarea {
+  resize: vertical;
+}
+
 .app_contact-form {
   height: 100vh;
   background: linear-gradient(207deg, transparent 0%, #757ca1  100%);
@@ -50,6 +54,7 @@ p {
       margin: 10px auto 20px;
 
       .form-title-input {
+        display: block;
         text-align: left;
         padding: 0 0 6px 10px;
         font-size: 16px;
