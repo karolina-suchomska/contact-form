@@ -1,6 +1,11 @@
 <script>
+import InputText from '../components/InputText.vue';
+
 export default {
   name: 'ContactForm',
+  components: {
+    InputText
+  },
   data () {
     return {
       form: {
@@ -12,67 +17,90 @@ export default {
       errors: {
         name: false,
         email: false,
-        subject: false,
         message: false
-      },
-      errorsText: {
-        name: '',
-        email: ''
       },
       errorAllFormFields: false
     }
   },
   methods: {
     sendMessage () {
-      this.validation();
+      if (this.validation()) {
+        return 0;
+      }
+     
+      console.log(this.form);
     },
+     /**
+     * Resets all error states to default.
+     */
     clearValidation () {
       this.errorAllFormFields = false;
 
-      Object.entries(this.form).forEach(
-        ([key, value]) => {
-          this.errors[key] = false;
-        }
-      );
+      this.$refs.inputTextNameRef.clearError();
+      this.$refs.inputTextEmailRef.clearError();
+      this.$refs.inputTextMessageRef.clearError();
     },
-    async validation () {
+    validation () {
+      let isFormValid = true;
+
       this.clearValidation();
 
       this.validationOfName();
       this.validationOfEmail();
-
-      this.errors.message = this.form.message === '';
+      this.validationOfMessage();
       
       Object.entries(this.errors).forEach(
         ([key, value]) => {
           if (value) {
             this.errorAllFormFields = true;
+            isFormValid = true;
+          } else {
+            isFormValid = false
           }
         }
-      );      
+      );     
+      
+      return isFormValid;
     },
+     /**
+     * Checks all conditions for field id="name".
+     */
     validationOfName () {
-      if (this.form.name === '') {
-        this.errors.name = true;
-      } else if (this.form.name.length < 5) {
-        this.errors.name = true;
-        this.errorsText.name = 'Name must be at least 5 characters long';
+      this.errors.name = true;
+
+      if (this.form.name.length < 5) {
+        this.$refs.inputTextNameRef.setError(this.form.name === '' ? '' : 'Name must be at least 5 characters long');
       } else {
         this.errors.name = false;
-        this.errorsText.name = '';
+        this.$refs.inputTextNameRef.clearError();
       }
     },
+     /**
+     * Checks all conditions for field id="email".
+     */
     validationOfEmail () {
-      if (this.form.email === '') {
-        this.errors.email = true;
-      } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.form.email)) {
-        this.errors.email = true;
-        this.errorsText.email = 'Please enter a valid email address';
+      this.errors.email = true;
+
+      if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.form.email)) {
+        this.$refs.inputTextEmailRef.setError(this.form.email === '' ? '' : 'Please enter a valid email address');
       } else {
         this.errors.email = false;
-        this.errorsText.email = '';
+        this.$refs.inputTextEmailRef.clearError();
       }
     },
+     /**
+     * Checks all conditions for field id="message".
+     */
+    validationOfMessage () {
+      this.errors.message = true;
+
+      if (this.form.message === '') {
+        this.$refs.inputTextMessageRef.setError('');
+      } else {
+        this.errors.message = false;
+        this.$refs.inputTextMessageRef.clearError();
+      }
+    }
   }
 };
 </script>
@@ -81,35 +109,34 @@ export default {
     <div class="contact-form-container">
       <form>
         <div class="form-box">
-          <p v-show="errorsText.name" class="error-message">{{ errorsText.name }}</p>
           <span
             class="character-counter"
             :class="{ 'max-character': form.name.length === 50 }"
           >
             {{ form.name.length }}/50
           </span>
-          <label class="form-title-input">Name</label>
-          <input 
-            class="form-input" 
-            :class="{ 'form-input-error': errors.name }"
-            type="text" 
-            maxlength="50"
+          <label for="name" class="form-title-input">Name</label>
+          <InputText 
+            id="name"
+            type="input"
             v-model="form.name"
+            :max-length="50"
+            ref="inputTextNameRef"
             @keyup.enter="sendMessage"
             @change="validationOfName"
-          >
+          />
         </div>
         <div class="form-box">
-          <p v-show="errorsText.email" class="error-message email">{{ errorsText.email }}</p>
-          <label class="form-title-input">E-mail</label>
-          <input 
-            class="form-input" 
-            :class="{ 'form-input-error': errors.email }"
-            type="text"
+          <label for="email" class="form-title-input">E-mail</label>
+          <InputText 
+            id="email"
+            type="input"
+            class="email"
             v-model="form.email"
+            ref="inputTextEmailRef"
             @keyup.enter="sendMessage"
             @change="validationOfEmail"
-          >
+          />
         </div>
         <div class="form-box">
           <span
@@ -118,14 +145,14 @@ export default {
           >
             {{ form.subject.length }}/100
           </span>
-          <label class="form-title-input">Subject</label>
-          <input 
-            class="form-input" 
-            type="text"
-            maxlength="100"
+          <label for="subject" class="form-title-input">Subject (optional)</label>
+          <InputText 
+            id="subject"
+            type="input"
             v-model="form.subject"
+            :max-length="100"
             @keyup.enter="sendMessage"
-          >
+          />
         </div>
         <div class="form-box">
           <span
@@ -134,18 +161,15 @@ export default {
           >
             {{ form.message.length }}/500
           </span>
-          <label class="form-title-input">Message</label>
-          <textarea 
-            class="form-input" 
-            :class="{ 'form-input-error': errors.message }"
-            name="form-message" 
-            id="formMessage" 
-            cols="30" 
-            rows="10"
-            maxlength="500"
+          <label for="message" class="form-title-input">Message</label>
+          <InputText 
+            id="message"
+            name="message"
+            type="textarea"
+            :max-length="500"
             v-model="form.message"
-            @change="errors.message = form.message === ''"
-           />
+            ref="inputTextMessageRef"
+          />
         </div>
         <div class="form-box button">
           <p v-show="errorAllFormFields" class="error-message">Complete the required fields</p>
