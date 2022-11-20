@@ -1,10 +1,19 @@
-<script setup>
+<script>
+import ContactForm from './views/ContactForm.vue';
+
+export default {
+  name: 'App',
+  components: {
+    ContactForm
+  },
+};
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <h2>Formularz kontaktowy</h2>
+  <div class="app_contact-form">
+    <div class="contact-form-title">
+      <h2>Contact Form</h2>
     </div>
-  </header>
+    <ContactForm />
+  </div>
 </template>

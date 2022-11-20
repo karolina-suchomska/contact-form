@@ -1,4 +1,79 @@
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Bold.ttf');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Regular.ttf');
+  font-weight: 400;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Roboto', serif;
+}
+
 body {
-    color: #25242b;
-    text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+.app_contact-form {
+  height: 100vh;
+  background: linear-gradient(207deg, transparent 0%, #757ca1  100%);
+  padding: 20px 30px;
+  color: #25242b;
+  text-align: center;
+  overflow: auto;
+
+  .contact-form-title {
+    h2 {
+      font-size: 46px;
+      margin: 50px auto 30px;
+    }
+  }
+
+  .contact-form-container {
+    max-width: 340px;
+    margin: 0 auto;
+
+    .form-box {
+      width: 340px;
+      margin: 10px auto 20px;
+
+      .form-title-input {
+        text-align: left;
+        padding: 0 0 6px 10px;
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border-radius: 10px;
+        border: solid 2px #747ea3;
+        background-color: transparent;
+        font-size: 14px;
+        outline: 0;
+      }
+    }
+
+    button {
+      padding: 8px 25px;
+      background: #343e62;
+      border: 0;
+      border-radius: 5px;
+      font-size: 20px;
+      color: #fff;
+    }
+  }
 }
