@@ -100,7 +100,7 @@ export default {
           >
         </div>
         <div class="form-box">
-          <p v-show="errorsText.email" class="error-message">{{ errorsText.email }}</p>
+          <p v-show="errorsText.email" class="error-message email">{{ errorsText.email }}</p>
           <label class="form-title-input">E-mail</label>
           <input 
             class="form-input" 
