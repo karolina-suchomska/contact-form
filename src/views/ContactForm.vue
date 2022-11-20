@@ -19,7 +19,9 @@ export default {
         email: false,
         message: false
       },
-      errorAllFormFields: false
+      errorAllFormFields: false,
+      isActionReportInProgress: false,
+      receivedMessage: ''
     }
   },
   methods: {
@@ -27,8 +29,46 @@ export default {
       if (this.validation()) {
         return 0;
       }
-     
-      console.log(this.form);
+
+      let requestData = [];
+
+      Object.entries(this.form).forEach(
+        ([key, value]) => {
+          requestData = '[' + key + ']' + value;
+        }
+      );  
+      
+      this.isActionReportInProgress = true;     
+      new Promise(() => {
+        let fetchUrl = `https://5d9f7fe94d823c0014dd323d.mockapi.io/api`;
+
+        fetch(fetchUrl, {
+          method: 'POST',
+          cache: 'no-cache',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestData)
+        }).then((response) => {
+          setTimeout(() => {
+            if (response.ok) {
+              response.json().then(() => {
+                this.receivedMessage = 'Your message has been sent.';
+                this.isActionReportInProgress = false;  
+              });
+            } else {
+              this.receivedMessage = 'Something went wrong. Please try again.';
+              this.isActionReportInProgress = false;  
+            }
+          }, 400);
+        }).catch(() => {
+          setTimeout(() => {
+            this.receivedMessage = 'Something went wrong. Please try again.';
+            this.isActionReportInProgress = false;  
+          }, 400);
+        });
+
+      });
     },
      /**
      * Resets all error states to default.
@@ -121,6 +161,7 @@ export default {
             type="input"
             v-model="form.name"
             :max-length="50"
+            :disabled="isActionReportInProgress"
             ref="inputTextNameRef"
             @keyup.enter="sendMessage"
             @change="validationOfName"
@@ -133,6 +174,7 @@ export default {
             type="input"
             class="email"
             v-model="form.email"
+            :disabled="isActionReportInProgress"
             ref="inputTextEmailRef"
             @keyup.enter="sendMessage"
             @change="validationOfEmail"
@@ -150,6 +192,7 @@ export default {
             id="subject"
             type="input"
             v-model="form.subject"
+            :disabled="isActionReportInProgress"
             :max-length="100"
             @keyup.enter="sendMessage"
           />
@@ -167,14 +210,22 @@ export default {
             name="message"
             type="textarea"
             :max-length="500"
+            :disabled="isActionReportInProgress"
             v-model="form.message"
             ref="inputTextMessageRef"
           />
         </div>
         <div class="form-box button">
           <p v-show="errorAllFormFields" class="error-message">Complete the required fields</p>
-          <button type="button" @click="sendMessage">Send</button>
+          <button 
+            type="button" 
+            @click="sendMessage"
+            :disabled="isActionReportInProgress"
+          >Send</button>
         </div>
       </form>
+      <div v-show="receivedMessage" class="received-message">
+        <p>{{ receivedMessage }}</p>
+      </div>
     </div>
 </template>
