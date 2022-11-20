@@ -1,0 +1,81 @@
+.contact-form {
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(359deg, $grey 0%, $black 100%);
+  padding: 20px 10px;
+  color: $light;
+  text-align: center;
+  overflow: auto;
+
+  .contact-form-title {
+    h2 {
+      font-size: 46px;
+      margin: 50px auto 30px;
+      @media screen and (min-width: 768px) {
+        font-size: 62px;
+        margin: 55px auto 45px;
+      }
+    }
+  }
+  
+  .contact-form-container {
+    .form-box {
+      position: relative;
+      width: 330px;
+      margin: 10px auto 20px;
+      @media screen and (min-width: 768px) {
+        width: 500px;
+        margin-bottom: 25px;
+      }
+
+      &.button {
+        @media screen and (min-width: 768px) {
+          margin-top: 40px;
+        }
+        .error-message {
+          top: -18px;
+          left: 0;
+          right: 0;
+          @media screen and (min-width: 768px) {
+            top: -30px;
+          }
+        }
+      }
+
+      .character-counter {
+        position: absolute;
+        top: 11px;
+        right: 12px;
+        font-size: 11px;
+        @media screen and (min-width: 768px) {
+          top: 8px;
+          font-size: 13px;
+        }
+
+        &.max-character {
+          color: $alert;
+        }
+      }
+
+      .form-title-input {
+        display: block;
+        text-align: left;
+        padding: 0 0 6px 10px;
+        font-size: 16px;
+        font-weight: 700;
+        @media screen and (min-width: 768px) {
+          font-size: 18px;
+        }
+      }
+    }
+
+    button {
+      padding: 12px 42px;
+      background: $black;
+      border: 0;
+      border-radius: 5px;
+      font-size: 26px;
+      color: $light;
+    }
+  }
+}

@@ -11,9 +11,11 @@ export default {
 
 <template>
   <div class="app_contact-form">
-    <div class="contact-form-title">
-      <h2>Contact Form</h2>
+    <div class="contact-form">
+      <div class="contact-form-title">
+        <h2>Contact Form</h2>
+      </div>
+      <ContactForm />
     </div>
-    <ContactForm />
   </div>
 </template>
